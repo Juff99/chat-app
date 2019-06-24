@@ -1,0 +1,181 @@
+html, body{
+    background-color: #343a40;
+    border: 0;
+    padding: 0;
+
+    scrollbar-width: thin;
+    scrollbar-color: #22262a transparent;
+}
+
+#chat, #f_message, #goimageform, #members_btn, #private_btn, #settings_btn{
+    display: none;
+}
+
+.alert{
+   margin-top: 62px;
+    border: 0;
+    border-radius: 0px;
+    width: 100%;
+
+    color: white;
+    background-color: #fe4e4e;
+}
+
+.mention {
+    background-color: #4B443A;
+
+    border: 0px;
+    border-left: 5px solid #EBAC31;
+    border-radius: 4px;
+    
+    padding: 5px;
+}
+
+.umention{
+    color: rgb(104, 142, 255);
+    background-color: #384253;
+    padding-left: 3px;
+    padding-bottom: 2px;
+    width: 100%;
+}
+
+#userForm{
+    margin-top: 100px;
+    width: 90%;
+
+    background-color: #22262a;
+    border: 0;
+    border-radius: 3px;
+
+    padding: 50px;
+}
+#username, #imageurl, #updatename, #updateimage{
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+
+    background-color: #454d54;
+    color: white;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+
+    border: 0;
+}
+#senduser{
+    width: 100%;
+    height: 40px;
+
+    background-color: #454d54;
+    color: #f8f9fa;
+    font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+
+    border: 0;
+}
+
+#nav {
+    background-color: #22262a;
+}
+
+.list-group {
+    margin-top: 56px;
+    margin-bottom: 50px;
+    height: 100%;
+}
+
+#f_message {
+    background-color: #454d54;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    float: right;
+}
+
+#f_image{
+    background-color: #454d54;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+}
+/*---------------------------------------*/
+#goimageform{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 24px;
+    height: 51px;
+    border: 0;
+
+    background-image:url('./add.png');
+    background-repeat:no-repeat;
+    background-color: #454d54;
+    background-position: center;
+    background-size: 25px;
+}
+
+#message {
+    width: 90%;
+    height: 50px;
+    font-size: 16px;
+    color: white;
+    background-color: #454d54;
+
+    border: 0;
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+#send_message{
+    background-image:url('./sendmessage.png');
+    background-repeat:no-repeat;
+    background-color: transparent;
+    background-position: center;
+    background-size: 30px;
+    border: 0;
+
+    padding-top: 15px;
+
+    height: 50px;
+    width: 7%;
+}
+
+#members_btn{
+    background-image:url('./members.png');
+    background-repeat:no-repeat;
+    background-color: transparent;
+    background-position: center;
+    background-size: 35px;
+    border: 0;
+
+    margin: 3px;
+
+    height: 40px;
+    width: 35px;
+}
+
+#settings_btn{
+    background-image:url('./settings.png');
+    background-repeat:no-repeat;
+    background-color: transparent;
+    background-position: center;
+    background-size: 24px;
+    border: 0;
+
+    margin: 3px;
+
+    height: 40px;
+    width: 35px;
+}
+
+#private_btn{
+    background-image:url('./private.png');
+    background-repeat:no-repeat;
+    background-color: transparent;
+    background-position: center;
+    background-size: 35px;
+    border: 0;
+
+    margin: 3px;
+
+    height: 40px;
+    width: 35px;
+}

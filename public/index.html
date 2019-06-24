@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="./style.css">
+    <title>Socket.io Chat</title>
+</head>
+
+<body>
+
+    <audio id="notifsound">
+        <source src="./private_notification.mp3">
+    </audio>
+
+    <nav id="nav" class="navbar fixed-top text-light">
+        <a class="navbar-brand">Socket.io Chat</a>
+        <div>
+            <button id="members_btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#usersModal"></button>
+            <button id="private_btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#privateModal"><span id="privatemsg" class="badge badge-danger" style="margin-top:20px; margin-left:10px;"></span></button>
+            <button id="settings_btn" type="button" class="btn btn-primary" data-toggle="modal" data-target="#settingsModal"></button>
+        </div>
+    </nav>
+
+    <div id="alert">
+        <!--<div class="alert alert-danger" role="alert">
+            Connection Lost
+        </div>-->
+    </div>
+
+    <center>
+        <form id="userForm">
+            <input id="username" type="text" placeholder="Username" autocomplete="off"><br><br>
+            <input id="imageurl" type="text" placeholder="Image URL" autocomplete="off"><br><br>
+            <button id="senduser" type="button">Entrar</button>
+        </form>
+    </center>
+
+    <ul id="chat" class="list-group">
+            
+        
+
+    </ul>
+
+    <div class="d-flex bd-highlight">
+        <div class="p-2 flex-grow-* bd-highlight">
+            <button id="goimageform" type="button" data-toggle="modal" data-target="#openupimage"></button>
+        </div>
+        <div class="p-2 bd-highlight">
+            <form id="f_message">
+                <input id="message" type="text" placeholder="Message #channel" autocomplete="off">
+                <button id="send_message" type="button"></button>
+            </form>
+        </div>
+    </div>
+
+    <!--Modal Upload Image-->
+    <div class="modal fade" id="openupimage" tabindex="-1" role="dialog" aria-labelledby="openupimageLongTitle"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-light bg-dark">
+                <div class="modal-header" style="border-bottom: 1px solid #22262a">
+                    <h5 class="modal-title" id="openupimageLongTitle">Upload Image</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form action="/upload" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+
+                            <div class="input-group mb-3">
+                                <div class="custom-file">
+                                    <input type="file" name="myImage" class="custom-file-input" id="inputGroupFile01" aria-describedby="inputGroupFileAddon01">
+                                    <label class="custom-file-label" for="inputGroupFile01">Choose Image</label>
+                                </div>
+                            </div>
+
+                    </div>
+                    <div class="modal-footer" style="border-top: 1px solid #22262a">
+                        <button type="submit" class="btn btn-secondary">Submit</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Users -->
+    <div class="modal fade" id="usersModal" tabindex="-1" role="dialog" aria-labelledby="usersModalLongTitle"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-light bg-dark">
+                <div class="modal-header" style="border-bottom: 1px solid #22262a">
+                    <h5 class="modal-title" id="usersModalLongTitle">
+                        Members Online<span id="nUsersOnline" class="badge badge-light"
+                            style="margin-left: 10px;">0</span>
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <ul id="usersList" class="list-group">
+
+                    </ul>
+
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #22262a">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal Notifications-->
+    <div class="modal fade" id="privateModal" tabindex="-1" role="dialog" aria-labelledby="privateModalLongTitle"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-light bg-dark">
+                <div class="modal-header" style="border-bottom: 1px solid #22262a">
+                    <h5 class="modal-title" id="privateModalLongTitle">
+                        Notifications
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <ul id="notifList" class="list-group">
+                    
+                    </ul>
+
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #22262a">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Modal Settings-->
+    <div class="modal fade" id="settingsModal" tabindex="-1" role="dialog" aria-labelledby="settingsModallLongTitle"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content text-light bg-dark">
+                <div class="modal-header" style="border-bottom: 1px solid #22262a">
+                    <h5 class="modal-title" id="settingsModalModalLongTitle">
+                        Settings
+                    </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="color: white">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <form>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="updatename" placeholder="Username">
+                        </div>
+                    </form>
+
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid #22262a">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary" id="updateuser">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+    <script src="bind.js"></script>
+
+</body>
+
+</html>
