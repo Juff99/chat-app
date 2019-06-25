@@ -9,6 +9,7 @@ function playnotif() {
 $(function () {
 
     var socket = io.connect();
+    
     socket.on('connect', function(){
         console.log('Connected');
         $(".alert").remove();
@@ -54,6 +55,25 @@ $(function () {
     var messageText = $("#message");
     var sendMessage = $("#send_message");
     var chat = $("#chat");
+
+    var upimgbtn = $("#upimgbtn");
+    var myImage = $("#myImage");
+    var uploadData = new FormData();
+    
+    upimgbtn.click((e) => {
+        e.preventDefault();
+        uploadData.append("myImage",myImage[0].files[0]);
+        jQuery.ajax({
+            url:'/upload',
+            data:uploadData,
+            processData:false,
+            contentType:false,
+            method: 'POST',
+            success: () => {
+                console.log("upload");
+            }
+        });
+    });
 
     //functions
     function getTime() {
@@ -191,8 +211,10 @@ $(function () {
                         chat.append($('<li class="list-group-item text-light bg-dark"><div class="media" style="float: left"><img src="'+data.imageurl+'"style="height: 75px; padding: 10px; border-radius: 50px"></div><div style="width: 100%"><div class="card-body"><h5 class="card-title">'+data.username+'</h5><h6 class="card-subtitle mb-2 text-muted">Sent at '+data.time+'</h6><div><p class="card-text">'+data.embed.msgTexto+'</p></div><br><div class="mention" style="border-left: 5px solid '+data.embed.embeds[i].color+'; background-color:#35363B; display:flex; width: 450px;"><div><h6 class="card-subtitle mb-2 text-muted" style="margin-top: 5px"><a style="color: rgb(45, 171, 255)" href="'+data.embed.embeds[i].url+'" target="_blank">'+data.embed.embeds[i].title+'</a></h6><iframe width="427" height="240" src="'+data.embed.embeds[i].video+'" style="border:0; border-radius:3px;"></iframe></div></div></div></div></li>'));
                     }else if(data.embed.embeds[i].type == 'image'){
                         chat.append($('<li class="list-group-item text-light bg-dark"><div class="media" style="float: left"><img src="'+data.imageurl+'" style="height: 75px; width:75px; padding: 10px; border-radius: 50px"></div><div style="width: 100%"><div class="card-body"><h5 class="card-title">'+data.username+'</h5><h6 class="card-subtitle mb-2 text-muted">Sent at '+data.time+'</h6><p class="card-text">'+data.embed.msgTexto+'</p>'+data.embed.embeds[i].imageHtml+'</div></div></li>'));
-                    }else if(data.embed.embeds[i].type == 'upimage'){
-                        chat.append($('<li class="list-group-item text-light bg-dark"><div class="media" style="float: left"><img src="'+data.imageurl+'" style="height: 75px; width:75px; padding: 10px; border-radius: 50px"></div><div style="width: 100%"><div class="card-body"><h5 class="card-title">'+data.username+'</h5><h6 class="card-subtitle mb-2 text-muted">Sent at '+data.time+'</h6><p class="card-text">'+data.embed.msgTexto+'</p>'+data.embed.embeds[0].imageHtml+'</div></div></li>'));
+                    }else if(data.embed.embeds[i].type == 'upimg'){
+                        chat.append($(data.embed.embeds[i].imageHtml));
+                        //chat.append($('<li class="list-group-item text-light bg-dark"><div class="media" style="float: left"><img src="'+data.imageurl+'" style="height: 75px; width:75px; padding: 10px; border-radius: 50px"></div><div style="width: 100%"><div class="card-body"><h5 class="card-title">'+data.username+'</h5><h6 class="card-subtitle mb-2 text-muted"></h6><p class="card-text"></p>'+data.embed.embeds[i].imageHtml+'</div></div></li>'));
+                        //chat.append($('<li class="list-group-item text-light bg-dark"><div class="media" style="float: left"><img src="'+data.imageurl+'" style="height: 75px; width:75px; padding: 10px; border-radius: 50px"></div><div style="width: 100%"><div class="card-body"><h5 class="card-title">'+data.username+'</h5><h6 class="card-subtitle mb-2 text-muted"></h6><p class="card-text"></p>'+data.embed.embeds[i].imageHtml+'</div></div></li>'));
                     }
                 }else{
                     //Normal Embed

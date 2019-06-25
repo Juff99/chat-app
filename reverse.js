@@ -34,19 +34,9 @@ app.get('/', (req, res) => {
     res.render('index.html');
 });
 
-app.post('/upload', (req, res) => {
-    upload(req, res, (err) => {
-        if(err){
-            res.send(err);
-        }else{
-            console.log(req.file);
-            io.emit('broadcast_message',{embed:{error:false, embeds:[{type:'upimage',hasEmbed:true,imageHtml:'<img src="'+req.file.destination+'">'}]}});
-        }
-    });
-});
-
 var io = require('socket.io')(server);
 
+//__init__ vars
 var users = [];
 var nUsers=0;
 var joinLeftLog = './logs/joinleflog.txt';
@@ -67,7 +57,7 @@ async function findHypertext(texto){
         return {error:'hyperlink nao encontrado', urlListLen:urlresult.length, msgTexto:msgTexto};
     }else{
         for (let i=0;i<urlresult.length;i++) {
-            if ((urlresult[i].href.match(/\.(jpeg|jpg|gif|png)$/))!= null) {
+            if ((urlresult[i].href.match(/\.(jpeg|jpg|gif|png)$/))!=null) {
                 emb = {type: 'image', imageHtml:'<img src="'+urlresult[i].href+'">', url: urlresult[i].href};
             }else{
                 emb = await metaScraper(urlresult[i].href)
@@ -164,6 +154,27 @@ function getData(x){
 io.on('connection', (socket) => {
     console.log("Socket connected: ", socket.id);
 
+    app.post('/upload', (req, res) => {
+        upload(req, res, (err) => {
+            if(err){
+                console.log(err);
+            }else{
+
+                /*for (let i=0;i<users.length;i++) {
+                    if (users[i].username == socket.username+'#'+users[i].uuid) {
+
+                        console.log(users[i]);
+                        var embedInfo = {type:'upimg',imageHtml:'<img src="../uploads/'+req.file.filename+'">'};
+                        io.emit('broadcast_message',{hasEmbed:true, embed:embedInfo, username:socket.username, imageurl:users[i].imageurl});
+                    }
+                }*/
+
+                console.log(req.file);
+                io.emit('broadcast_message',{hasEmbed:true, embed:{error:false, embeds:[{type:'upimg',imageHtml:'<img src="../uploads/'+req.file.filename+'" style="height:auto; witdh:500px;">'}]}});
+            }
+        });
+    });
+
     socket.on('chat_message', (data) => {
         var fromname = '';
         var tousername = '';
@@ -212,7 +223,7 @@ io.on('connection', (socket) => {
         var uid = uuid();
         nUsers++;
         socket.username = data.username;
-        users.push({id: socket.id, name:socket.username, username:socket.username+"#"+uid, imageurl: data.imageurl});
+        users.push({id: socket.id, name:socket.username, username:socket.username+"#"+uid, uuid:uid, imageurl: data.imageurl});
         io.emit('users',{usersOnline:{nUsers:nUsers,users:users}, user:{id:socket.id, name:socket.username, username:socket.username+"#"+uid, imageurl:data.imageurl,inChannel:true, changeSettings:false}});
         io.sockets.connected[socket.id].emit('private', {type:'settings',user:{id:socket.id, name:socket.username, uuid:uid, username:socket.username+"#"+uid, imageurl: data.imageurl}});
         rData = readFile(joinLeftLog);

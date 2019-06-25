@@ -4,7 +4,8 @@
   "description": "chat with socket.io",
   "main": "reverse.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node reverse.js",
+    "test": "node test.js"
   },
   "author": "",
   "license": "ISC",
