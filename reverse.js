@@ -40,7 +40,7 @@ app.post('/upload', (req, res) => {
             res.send(err);
         }else{
             console.log(req.file);
-            res.send(req.file);
+            io.emit('broadcast_message',{embed:{error:false, embeds:[{type:'upimage',hasEmbed:true,imageHtml:'<img src="'+req.file.destination+'">'}]}});
         }
     });
 });
@@ -67,7 +67,10 @@ async function findHypertext(texto){
         return {error:'hyperlink nao encontrado', urlListLen:urlresult.length, msgTexto:msgTexto};
     }else{
         for (let i=0;i<urlresult.length;i++) {
-            emb = await metaScraper(urlresult[i].href)
+            if ((urlresult[i].href.match(/\.(jpeg|jpg|gif|png)$/))!= null) {
+                emb = {type: 'image', imageHtml:'<img src="'+urlresult[i].href+'">', url: urlresult[i].href};
+            }else{
+                emb = await metaScraper(urlresult[i].href)
                 .then((data) => {
                     if (data.error == true) {
                         var em = {};
@@ -77,6 +80,7 @@ async function findHypertext(texto){
                     }else{
                         var em = {};
                         em.url = urlresult[i].href;
+
                         if (data.hasOwnProperty('title')) {
                             em.title = data.title;
                         }
@@ -105,6 +109,7 @@ async function findHypertext(texto){
                         return em;
                     }
                 });
+            }
             embed.push(emb);
         }
     }
