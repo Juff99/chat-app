@@ -1,4 +1,7 @@
 # Installation
 
-  npm install
-  node reverse.js
+    npm install
+  
+# Run
+
+    node reverse.js
