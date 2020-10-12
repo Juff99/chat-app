@@ -1,6 +1,7 @@
 # Installation
 
     npm install
+    mkdir logs
   
 # Run
 
