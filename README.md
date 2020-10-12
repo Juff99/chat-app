@@ -1,2 +1,2 @@
-npm install |
-node reverse.js
+  npm install
+  node reverse.js
